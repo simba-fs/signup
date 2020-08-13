@@ -1,0 +1,26 @@
+{
+  "name": "user-system",
+  "version": "1.0.0",
+  "description": "User system for web App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simba-fs/user-system.git"
+  },
+  "author": "simba-fs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/simba-fs/user-system/issues"
+  },
+  "homepage": "https://github.com/simba-fs/user-system#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.28",
+    "mongoose-unique-validator": "^2.0.3"
+  }
+}
