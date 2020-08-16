@@ -1,6 +1,7 @@
 const env = require('./util/env');
 const mongoose = require('mongoose');
 const User = require('./util/User');
+const Pool = require('@simba.fs/pool');
 
 // connect to DB
 mongoose.connect(env('DB'), {useNewUrlParser: true, useUnifiedTopology: true})
