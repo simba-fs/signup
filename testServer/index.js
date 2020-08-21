@@ -1,10 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const { signup } = require('../index');
 
-app.use(bodyParser);
-app.use(require('../index'));
+app.use(bodyParser.json());
+app.use('/signup', signup);
 
-app.use((req, res, next) => {
-	res.status(400).json({error: 'error'});
-})
+app.listen(3000, () => console.log('listen on port 3000'));

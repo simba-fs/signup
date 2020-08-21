@@ -20,6 +20,7 @@ function signup(req, res, next){
 	User.find({ username })
 	// check if username exist
 		.then(result => {
+			console.log(result);
 			if(result.length !== 0){
 				if([...user.keys()].find(i => i.username === username)) return res.headersSent || res.status(400).json({
 					error: 'username is used but not cmplete register process, maybe you can wait or choise another username'
