@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 const promission = require('./promission');
-const env = require('./env');
 
 // connect to DB
-mongoose.connect(env('DB'), {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(process.env.DB, {useNewUrlParser: true, useUnifiedTopology: true})
 	.then(() => console.log('Connected to DB'))
 	.catch((e) => {
 		console.error(e);
