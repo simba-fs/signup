@@ -1,6 +1,7 @@
 const User = require('../util/User');
 const Pool = require('@simba.fs/pool');
-const token = require('random-token').create('0123456789');
+const randomToken = require('random-token');
+const genToken = () => randomToken.create('0123456789')(process.env.token_size);
 
 // express-validator
 const { body, validationResult } = require('express-validator');
@@ -45,11 +46,12 @@ function signupMiddleware(req, res, next){
 	// write into user pool
 		.then(() => {
 			let timeout = process.env.timeout;
-			console.log(timeout);
+			let token = genToken();
 			user.add({
 				username,
 				email,
-				password
+				password,
+				token
 			}, timeout);
 			res.json({
 				message: 'please varify your email'
