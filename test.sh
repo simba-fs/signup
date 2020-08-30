@@ -1,8 +1,8 @@
 #!/bin/bash
 curl -sH "Content-Type: application/json"\
 	--data '{
-	"username": "kesdfasdnny",
+	"username": "simba-fs",
 	"password": "ss",
-	"email": "sadsafimba.fs@gmail.com"
+	"email": "simba.fs@gmail.com"
 }' \
 	http://localhost:3000/signup | jq '.'

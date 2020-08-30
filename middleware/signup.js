@@ -1,5 +1,9 @@
 const User = require('../util/User');
 const Pool = require('@simba.fs/pool');
+const sendMail = require('../function/sendMail');
+const mailMsg = require('../' + process.env.mailMsg);
+
+// token
 const randomToken = require('random-token');
 const genToken = () => randomToken.create('0123456789')(process.env.token_size);
 
@@ -47,6 +51,10 @@ function signupMiddleware(req, res, next){
 		.then(() => {
 			let timeout = process.env.timeout;
 			let token = genToken();
+			let localMailMsg = mailMsg
+				.replace('{username}', username)
+				.replace('{email}', email)
+				.replace('{token}', token);
 			user.add({
 				username,
 				email,
@@ -56,7 +64,12 @@ function signupMiddleware(req, res, next){
 			res.json({
 				message: 'please varify your email'
 			});
-			console.log(user);
+			return sendMail({
+				to: email,
+				subject: 'Please varify you email',
+				text: localMailMsg,
+				html: `<pre>${localMailMsg}</pre>`
+			})
 		})
 		.catch((e) => {
 			console.error(e);

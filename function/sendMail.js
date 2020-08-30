@@ -19,7 +19,6 @@ function sendMail({to, subject, html, text}){
 	if(!text) return new Promise((res, rej) => rej('\'text\' missed'));
 	if(!to) return new Promise((res, rej) => rej('\'to\' missed'));
 	if(!subject) return new Promise((res, rej) => rej('\'subject\' missed'));
-	console.log({to, subject, html, text});
 
 	return transporter.sendMail({
 		from: `"${mailSender}" <${mailUser}>`,
@@ -27,9 +26,7 @@ function sendMail({to, subject, html, text}){
 		subject: subject, 
 		text: text || '', 
 		html: html || '', 
-	}).then(info => {
-		console.log("Message sent: %s", info.messageId);
-	}).catch(console.error);
+	});
 }
 
 module.exports = sendMail;
