@@ -3,8 +3,10 @@ require('@simba.fs/dotenv').init({
 	timeout: 10000,
 	mailMsg: './misc/mailMsg'
 });
-const signup = require('./middleware/signup');
+const signup = require('./middleware/signup/signup');
+const varifyEmail = require('./middleware/signup/varify');
 
 module.exports = {
-	signup
+	signup,
+	varifyEmail
 }

@@ -1,4 +1,6 @@
 const nodemailer = require("nodemailer");
+const htmlToText = require('nodemailer-html-to-text').htmlToText;
+
 const mailUser = process.env.mailUser;
 const mailSender = process.env.mailSender || mailUser.match(/[\w\.]*/)[0];
 const mailPW = process.env.mailUser;
@@ -12,6 +14,7 @@ let transporter = nodemailer.createTransport({
 		pass: process.env.mailPW, 
 	},
 });
+transporter.use('compile', htmlToText());
 
 function sendMail({to, subject, html, text}){
 	// error

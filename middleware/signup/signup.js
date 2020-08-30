@@ -1,7 +1,7 @@
-const User = require('../util/User');
-const Pool = require('@simba.fs/pool');
-const sendMail = require('../function/sendMail');
-const mailMsg = require('../' + process.env.mailMsg);
+const User = require('../../util/User');
+const sendMail = require('../../function/sendMail');
+const mailMsg = require('../../' + process.env.mailMsg);
+const user = require('./data');
 
 // token
 const randomToken = require('random-token');
@@ -9,10 +9,7 @@ const genToken = () => randomToken.create('0123456789')(process.env.token_size);
 
 // express-validator
 const { body, validationResult } = require('express-validator');
-const errorMiddleware = require('../middleware/error');
-
-// pool
-const user = new Pool();
+const errorMiddleware = require('../../middleware/error');
 
 // signup middleware
 function signupMiddleware(req, res, next){
@@ -52,16 +49,17 @@ function signupMiddleware(req, res, next){
 			let timeout = process.env.timeout;
 			let token = genToken();
 			let localMailMsg = mailMsg
-				.replace('{username}', username)
-				.replace('{email}', email)
-				.replace('{token}', token);
+				.replace(/{username}/g, username)
+				.replace(/{email}/g, email)
+				.replace(/{token}/g, token);
 			user.add({
 				username,
 				email,
 				password,
 				token
 			}, timeout);
-			res.json({
+			console.log(token);
+			res.headersSent || res.json({
 				message: 'please varify your email'
 			});
 			return sendMail({
@@ -77,9 +75,6 @@ function signupMiddleware(req, res, next){
 				error: 'something error'
 			});
 		});
-	// return res.status(400).json({
-	//	error: 'no reply'
-	// });
 }
 
 let signup = [
