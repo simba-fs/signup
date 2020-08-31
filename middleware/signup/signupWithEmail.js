@@ -1,7 +1,5 @@
 function signup(User){
 	const sendMail = require('../../function/sendMail');
-	const mailMsg = require('../../' + process.env.mailMsg);
-	const user = require('./data');
 
 	// token
 	const randomToken = require('random-token');
@@ -15,38 +13,20 @@ function signup(User){
 	function signupMiddleware(req, res, next){
 		const { username, password, email } = req.body;
 
-		// check if username is in the pool
-		if([...user.keys()].find(i => i.username === username)) return res.headersSent || res.status(400).json({
-			error: 'The username has been used, but the registration process is not over yet, maybe you can wait or choose another username'
-		});
-
-		// check if email is in the pool
-		if([...user.keys()].find(i => i.email === email)) return res.headersSent || res.status(400).json({
-			error: 'The email has been used, but the registration process is not over yet, maybe you can wait or choose another email'
-		});
-
-		User.find({ username })
-		// check if username exist
+		User.find({
+			$or: [{username}, {email}]
+		})
 			.then(result => {
-				if(result.length !== 0){
-					return res.headersSent || res.status(400).json({
-						error: 'the username was token, choise another one'
-					});
-				}
-				return User.find({ email });
-			})
-		// check if email exist
-			.then(result => {
-				if(result.length !== 0){
-					return res.headersSent || res.status(400).json({
-						error: 'the email was token, choise another'
-					});
-				};
-				return;
+				if(!result) return;
+				if(result.username === username) return res.headersSent || res.status(400).json({
+					error: 'username used'
+				});
+				if(result.email === email) return res.headersSent || res.status(400).json({
+					error: 'email used'
+				});
 			})
 		// write into user pool
 			.then(() => {
-				let timeout = process.env.timeout;
 				let token = genToken();
 				let localMailMsg = mailMsg
 					.replace(/{username}/g, username)
