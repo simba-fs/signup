@@ -1,11 +1,7 @@
 function signup(User){
 	const sendMail = require('../../function/sendMail');
-	const mailMsg = require('../../' + process.env.mailMsg);
-	const user = require('./data');
-
-	// token
-	const randomToken = require('random-token');
-	const genToken = () => randomToken.create('0123456789')(process.env.token_size);
+	const render = require('../../function/render');
+	// const text = require('html-to-text').fromString;
 
 	// express-validator
 	const { body, validationResult } = require('express-validator');
@@ -13,60 +9,36 @@ function signup(User){
 
 	// signup middleware
 	function signupMiddleware(req, res, next){
-		const { username, password, email } = req.body;
+		const { username, password } = req.body;
 
-		// check if username is in the pool
-		if([...user.keys()].find(i => i.username === username)) return res.headersSent || res.status(400).json({
-			error: 'The username has been used, but the registration process is not over yet, maybe you can wait or choose another username'
-		});
-
-		// check if email is in the pool
-		if([...user.keys()].find(i => i.email === email)) return res.headersSent || res.status(400).json({
-			error: 'The email has been used, but the registration process is not over yet, maybe you can wait or choose another email'
-		});
-
-		User.find({ username })
-		// check if username exist
+		User.findOne({ username })
 			.then(result => {
-				if(result.length !== 0){
-					return res.headersSent || res.status(400).json({
-						error: 'the username was token, choise another one'
-					});
-				}
-				return User.find({ email });
-			})
-		// check if email exist
-			.then(result => {
-				if(result.length !== 0){
-					return res.headersSent || res.status(400).json({
-						error: 'the email was token, choise another'
-					});
-				};
-				return;
+				if(!result) return;
+				if(result.username === username) return res.headersSent || res.status(400).json({
+					error: 'username used'
+				});
 			})
 		// write into user pool
 			.then(() => {
-				let timeout = process.env.timeout;
-				let token = genToken();
-				let localMailMsg = mailMsg
-					.replace(/{username}/g, username)
-					.replace(/{email}/g, email)
-					.replace(/{token}/g, token);
-				user.add({
+				return User.create({
 					username,
-					email,
-					password,
-					token
-				}, timeout);
-				console.log(token);
+					password
+				})
+			})
+			.then(user => {
+				let mailMsg = render('mailMsg')({
+					appName: 'User System',
+					appNameTW: 'User System',
+					username: user.username
+				});
 				res.headersSent || res.json({
-					message: 'please varify your email'
+					message: 'success'
 				});
 				return sendMail({
 					to: email,
-					subject: 'Please varify you email',
-					text: localMailMsg,
-					html: `<pre>${localMailMsg}</pre>`
+					subject: 'Wellcome to User System',
+					text: mailMsg,
+					html: mailMsg
 				})
 			})
 			.catch((e) => {
@@ -79,7 +51,6 @@ function signup(User){
 
 	return signup = [
 		body('username').isString(),
-		body('email').isEmail(),
 		body('password').isString(),
 		errorMiddleware,
 		signupMiddleware
