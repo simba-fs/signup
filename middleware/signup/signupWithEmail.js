@@ -1,5 +1,7 @@
 function signup(User){
 	const sendMail = require('../../function/sendMail');
+	const render = require('../../function/render');
+	// const text = require('html-to-text').fromString;
 
 	// token
 	const randomToken = require('random-token');
@@ -13,7 +15,7 @@ function signup(User){
 	function signupMiddleware(req, res, next){
 		const { username, password, email } = req.body;
 
-		User.find({
+		User.findOne({
 			$or: [{username}, {email}]
 		})
 			.then(result => {
@@ -28,25 +30,29 @@ function signup(User){
 		// write into user pool
 			.then(() => {
 				let token = genToken();
-				let localMailMsg = mailMsg
-					.replace(/{username}/g, username)
-					.replace(/{email}/g, email)
-					.replace(/{token}/g, token);
-				user.add({
+				return User.create({
 					username,
 					email,
 					password,
 					token
-				}, timeout);
-				console.log(token);
+				})
+			})
+			.then(user => {
+				let mailMsg = render('mailMsg')({
+					appName: 'User System',
+					appNameTW: 'User System',
+					email: user.email,
+					username: user.username,
+					token: user.token
+				});
 				res.headersSent || res.json({
 					message: 'please varify your email'
 				});
 				return sendMail({
 					to: email,
 					subject: 'Please varify you email',
-					text: localMailMsg,
-					html: `<pre>${localMailMsg}</pre>`
+					text: mailMsg,
+					html: mailMsg
 				})
 			})
 			.catch((e) => {
