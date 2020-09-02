@@ -1,6 +1,7 @@
 function signup(User){
-	const sendMail = require('../../function/sendMail');
-	const render = require('../../function/render');
+	module.paths.push(process.cwd());
+	const sendMail = require('function/sendMail');
+	const render = require('function/render');
 	// const text = require('html-to-text').fromString;
 
 	// express-validator

@@ -6,7 +6,7 @@ const app = express();
 
 const User = require('./User');
 
-const userSys = require('../index');
+const userSys = require('..');
 const [signup, varifyEmail] = userSys({email: true});
 
 app.use(bodyParser.json());

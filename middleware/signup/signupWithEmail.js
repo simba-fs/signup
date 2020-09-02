@@ -1,7 +1,8 @@
 function signup(User){
-	const sendMail = require('../../function/sendMail');
-	const render = require('../../function/render');
-	// const text = require('html-to-text').fromString;
+	module.paths.push(process.cwd());
+	const sendMail = require('function/sendMail');
+	const render = require('function/render');
+	const text = require('html-to-text').fromString;
 
 	// token
 	const randomToken = require('random-token');
@@ -51,7 +52,7 @@ function signup(User){
 				return sendMail({
 					to: email,
 					subject: 'Please varify you email',
-					text: mailMsg,
+					text: text(mailMsg),
 					html: mailMsg
 				})
 			})
