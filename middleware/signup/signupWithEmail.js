@@ -5,8 +5,7 @@ function signup(User){
 	const text = require('html-to-text').fromString;
 
 	// token
-	const randomToken = require('random-token');
-	const genToken = () => randomToken.create('0123456789')(process.env.token_size);
+	const genToken = require('function/random')();
 
 	// express-validator
 	const { body, validationResult } = require('express-validator');

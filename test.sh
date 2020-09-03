@@ -8,7 +8,7 @@ curl -sH "Content-Type: application/json"\
 
 curl -sH "Content-Type: application/json"\
 	--data '{
-	"token": "809494",
+	"token": "324367",
 	"email": "simba.fs@gmail.com"
 }' \
-	http://localhost:3000/signup/varify | jq '.'
+	http://localhost:3000/signup/varify 

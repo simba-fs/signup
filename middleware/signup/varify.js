@@ -11,11 +11,11 @@ function varifyEmail(User){
 				if(!user || user.token !== token) return res.status(400).json({
 					error: 'token not match'
 				});
-				return res.status(200).json({
-					message: 'success'
-				});
-				
+				return User.updateOne({ email }, { token: null, varified: true });
 			})
+			.then(() => res.status(200).json({
+				message: 'success'
+			}))
 			.catch(e => {
 				console.error(e);
 				res.headersSent || res.status(400).json({
