@@ -20,7 +20,7 @@ npm i @simba.fs/signup --save
 ```
 
 # Doc
-https://simba-fs.github.io/signup
+[https://simba-fs.github.io/signup](https://simba-fs.github.io/signup)
 
 # License
 [MIT](./LICENSE)

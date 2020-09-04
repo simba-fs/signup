@@ -1,10 +1,10 @@
 {
-  "name": "user-system",
+  "name": "@simba.fs/signup",
   "version": "1.0.0",
   "description": "User system for web App",
   "main": "index.js",
   "scripts": {
-    "jsdoc": " jsdoc -R README.md -d docs "
+    "jsdoc": " jsdoc -R README.md -d docs ."
   },
   "repository": {
     "type": "git",
