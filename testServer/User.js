@@ -16,7 +16,7 @@ const User = mongoose.Schema({
 	},
 	token: {
 		type: String,
-		required: true
+		default: null
 	},
 	password: {
 		type: String,
@@ -24,7 +24,7 @@ const User = mongoose.Schema({
 	},
 	email: {
 		type: String,
-		required: true
+		default: null
 	},
 	varified: {
 		type: Boolean,
